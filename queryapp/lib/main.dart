@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'VG Sales Analysis',
       theme: ThemeData(
-        primarySwatch: Colors.lime,
+        primarySwatch: Colors.lightBlue,
       ),
       home: MyHomePage(),
     );
