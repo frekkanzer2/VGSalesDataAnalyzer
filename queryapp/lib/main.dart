@@ -1,4 +1,7 @@
+// @dart=2.9
+
 import 'package:flutter/material.dart';
+import 'package:queryapp/Utils/custom_colors.dart';
 import 'package:queryapp/home_page.dart';
 
 void main() {
@@ -11,9 +14,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'VG Sales Analysis',
-      theme: ThemeData(
-        primarySwatch: Colors.lightBlue,
-      ),
       home: MyHomePage(),
     );
   }

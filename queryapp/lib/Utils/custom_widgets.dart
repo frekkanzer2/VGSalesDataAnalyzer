@@ -1,4 +1,6 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:queryapp/Utils/custom_colors.dart';
 
 class SectionDivider extends StatelessWidget {
   @override
@@ -14,8 +16,8 @@ class SectionDivider extends StatelessWidget {
 class AttributeButtonSelection extends StatefulWidget {
   AttributeButtonSelection({Key? key, required this.button_text, required this.callback}) : super(key: key);
 
-  String button_text;
-  Function callback;
+  String button_text = "";
+  VoidCallback callback;
 
   @override
   _AttributeButtonSelectionState createState() => _AttributeButtonSelectionState();
@@ -27,25 +29,29 @@ class _AttributeButtonSelectionState extends State<AttributeButtonSelection> {
     return Expanded(
       child: Container(
         child: TextButton(
-          child: Text(
+          child: AutoSizeText(
             widget.button_text,
+            maxLines: 1,
+            overflow: TextOverflow.fade,
+            minFontSize: 14,
             style: TextStyle(
-              color: Colors.black,
+              color: custom_White_70,
               fontSize: 18,
             ),
           ),
-          onPressed: null,
+          onPressed: widget.callback,
         ),
         decoration: BoxDecoration(
+          color: custom_Black_70,
           border: Border.all(
-            color: Colors.black,
+            color: custom_Black_100,
             width: 2,
           ),
           borderRadius: new BorderRadius.only(
-            topLeft: const Radius.circular(12.0),
-            topRight: const Radius.circular(12.0),
-            bottomLeft: const Radius.circular(12.0),
-            bottomRight: const Radius.circular(12.0),
+            topLeft: const Radius.circular(8.0),
+            topRight: const Radius.circular(8.0),
+            bottomLeft: const Radius.circular(8.0),
+            bottomRight: const Radius.circular(8.0),
           ),
         ),
       ),
