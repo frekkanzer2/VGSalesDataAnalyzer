@@ -14,10 +14,12 @@ class SectionDivider extends StatelessWidget {
 }
 
 class AttributeButtonSelection extends StatefulWidget {
-  AttributeButtonSelection({Key? key, required this.button_text, required this.callback}) : super(key: key);
+  AttributeButtonSelection({Key? key, required this.button_text,
+    required this.callback, required this.hasBorders}) : super(key: key);
 
   String button_text = "";
   VoidCallback callback;
+  bool hasBorders = true;
 
   @override
   _AttributeButtonSelectionState createState() => _AttributeButtonSelectionState();
@@ -43,10 +45,10 @@ class _AttributeButtonSelectionState extends State<AttributeButtonSelection> {
         ),
         decoration: BoxDecoration(
           color: custom_Black_70,
-          border: Border.all(
+          border: (widget.hasBorders) ? Border.all(
             color: custom_Black_100,
             width: 2,
-          ),
+          ) : null,
           borderRadius: new BorderRadius.only(
             topLeft: const Radius.circular(8.0),
             topRight: const Radius.circular(8.0),
