@@ -1,8 +1,7 @@
 // @dart=2.9
 
 import 'package:flutter/material.dart';
-import 'package:queryapp/Utils/custom_colors.dart';
-import 'package:queryapp/home_page.dart';
+import 'View/home_page.dart';
 
 void main() {
   runApp(MyApp());
