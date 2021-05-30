@@ -479,7 +479,9 @@ class _CenteredSectionState extends State<CenteredSection> {
                             fontSize: 18,
                           ),
                         ),
-                        onPressed: null,
+                        onPressed: () {
+                          showAlertDialog(context);
+                        }
                       ),
                       decoration: BoxDecoration(
                         color: custom_Black_70,
@@ -745,5 +747,42 @@ class _CenteredSectionState extends State<CenteredSection> {
     );
 
   }
+
+
+  showAlertDialog(BuildContext context) {
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: Text(
+          "Range di valori",
+          maxLines: 1,
+          overflow: TextOverflow.clip,
+          style: TextStyle(
+            color: custom_White_70,
+            fontSize: 22,
+          ),
+        ),
+        content: Text(
+          "Inserisci solo il valore iniziale per trovare tutti i record con valore maggiore o uguale;\n\n" +
+              "Inserisci solo il valore finale per trovare tutti i record con valore inferiore o uguale;\n\n" +
+              "Inserisci lo stesso valore in entrambi i campi per trovare i valori uguali;\n\n" +
+              "Inserisci due valori diversi per trovare tutti i record con valore compreso.",
+          style: TextStyle(
+            color: custom_White_70,
+            fontSize: 18,
+          ),
+        ),
+        backgroundColor: custom_Black_70,
+        elevation: 24.0,
+      ),
+      barrierDismissible: true,
+    );
+
+  }
+
+
+
 }
 
