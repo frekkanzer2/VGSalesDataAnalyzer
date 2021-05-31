@@ -1,5 +1,7 @@
 from pymongo import MongoClient
-
+from pymongo.message import query
+import math
+import time
 
 ### CONNESSIONE A MONGODB SERVER 
 client = MongoClient("mongodb+srv://luigi:luigi@vgsales.x71p0.mongodb.net/test?authSource=admin&replicaSet=atlas-3sr7cm-shard-0&readPreference=primary&appname=MongoDB%20Compass&ssl=true")
@@ -14,9 +16,11 @@ pprint(serverStatusResult)
 # connesione al db "vgsales"
 db = client.vgsales
 # restituisce tutti i videogiochi (documenti) non consistenti
-query = {"$or": [{"Name": {"$exists": False}}, {"Platform": {"$exists": False}}, {"Year": {"$exists": False}}, {"Genre": {"$exists": False}}, 
-                {"Publisher": {"$exists": False}}, {"NA_Sales": {"$exists": False}}, {"EU_Sales": {"$exists": False}}, 
-                {"JP_Sales": {"$exists": False}}, {"Other_Sales": {"$exists": False}}, {"Global_Sales": {"$exists": False}}]}
+query = {"$or": [{"Name": "N/A"}, {"Platform": "N/A"}, {"Year": float("NaN")}, {"Genre": "N/A"}, 
+                {"Publisher": "N/A"}, {"NA_Sales": float("NaN")}, {"EU_Sales": float("NaN")}, 
+                {"JP_Sales": float("NaN")}, {"Other_Sales": float("NaN")}, {"Global_Sales": float("NaN")}]}
+
+
 n_games = db.main_data.count_documents(query)
 print("\n-Videogiochi non consistenti: "+ str(n_games)+ "\n")
 
@@ -25,64 +29,54 @@ if n_games > 0:
     try:
         for game in games:
             game = dict(game)
+            print(game)
 
         # Rank è la chiave primaria del documento
-            id_rank = {"Rank": game.get("Rank")}   
-            #print("\n-Chiave primaria Rank: ")   
-            #print(id_rank) 
-            print("\n-Videogioco non consistente: ") 
-            print(db.main_data.find_one(id_rank))
+            id_rank = {"Rank": game.get("Rank")}
 
-        # controllo dei campi non presenti (ad eccezione del campo "Rank" che è la chiave primaria)
-            if "Name" not in game:
-                print("Name non presente")
-                game["Name"] = "NaN"
-            if "Platform" not in game:
-                print("Platform non presente")
-                game["Platform"] = "NaN"
-            if "Year" not in game:
-                print("Year non presente")
-                game["Year"] = -1
-            if "Genre" not in game:
-                print("Genre non presente")
-                game["Genre"] = "NaN"
-            if "Publisher" not in game:
-                print("Publisher non presente")
-                game["Publisher"] = "NaN"
-            if "NA_Sales" not in game:
-                print("NA_Sales non presente")
-                game["NA_Sales"] = -1
-            if "EU_Sales" not in game:
-                print("EU_Sales non presente")
-                game["EU_Sales"] = -1
-            if "JP_Sales" not in game:
-                print("JP_Sales non presente")
-                game["JP_Sales"] = -1
-            if "Other_Sales" not in game:
-                print("Other_Sales non presente")
-                game["Other_Sales"] = -1
-            if "Global_Sales" not in game:
-                print("Global_Sales non presente")
-                game["Global_Sales"] = -1
-            
-        # controllo e preparazione del videogioco da aggiornare
+        # controlli per l'eliminazione degli attributi nulli
+            if game.get("Name") == "N/A":
+                del game["Name"]
+            if game.get("Platform") == "N/A":
+                del game["Platform"]
+            if math.isnan(game["Year"]):
+                del game["Year"]
+            if game.get("Genre") == "N/A":
+                del game["Genre"]
+            if game.get("Publisher") == "N/A":
+                del game["Publisher"]
+            if math.isnan(game["NA_Sales"]):
+                del game["NA_Sales"]
+            if math.isnan(game["NA_Sales"]):
+                del game["EU_Sales"]
+            if math.isnan(game["NA_Sales"]):
+                del game["JP_Sales"]
+            if math.isnan(game["NA_Sales"]):
+                del game["Other_Sales"]
+            if math.isnan(game["NA_Sales"]):
+                del game["Global_Sales"]
+       
+        # controllo e preparazione del videogioco da aggiornare 
             print("\n-Videogioco aggiornato a: ")
-            print(game)
             game.pop("_id")
-            game.pop("Rank")
-            game = {"$set": game}            
+            print(game)
 
         # operazione di aggiornamento dei documenti del database
-            db.main_data.update_one(id_rank, game)
-            print("\n")            
-    
+            db.main_data.delete_one(id_rank)
+            time.sleep(0.5)
+            db.main_data.insert_one(game)
+            time.sleep(0.5)
+            print("\n")
+
     except:
-        print("\n\n")
+        #print("\n\n")
         raise Exception()
 
     games.close()
 
 else:
     print("\n-Tutti i videogiochi sono consistenti...")
+
+print("\n-Videogiochi non consistenti: "+ str(n_games)+ "\n")
 
 print("\n")
