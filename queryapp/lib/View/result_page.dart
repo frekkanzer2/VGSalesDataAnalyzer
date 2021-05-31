@@ -34,17 +34,30 @@ class _ResultsPageState extends State<ResultsPage> {
 
   void executeQuery() async {
     OperationContainer oc = new OperationContainer();
-    String queryString = oc.getQuery();
-    if (queryString == "{}") queryResult = 0;
-    else queryResult = 1;
-    if (queryResult == 0) {
-      hasLoaded = true;
-      canQuery = false;
-    }
-    if (queryResult == 1) {
-      // can execute on database
-      obtainedResults = await DatabaseUtils.executeQuery();
-      print(obtainedResults);
+    if (!oc.aggregation_isEnabled()) {
+      String queryString = oc.getQuery();
+      if (queryString == "{}") queryResult = 0;
+      else queryResult = 1;
+      if (queryResult == 0) {
+        hasLoaded = true;
+        canQuery = false;
+      }
+      if (queryResult == 1) {
+        // can execute on database
+        obtainedResults = await DatabaseUtils.executeQuery();
+        print(obtainedResults);
+        setState(() {
+          canQuery = true;
+          hasLoaded = true;
+        });
+      }
+    } else {
+      // Aggregation enabled
+      Map _m = await DatabaseUtils.executeAggregate();
+      print(_m);
+      List<dynamic> dynList = _m["cursor"]["firstBatch"];
+      List<Map<String, dynamic>> mapsList = dynList.cast<Map<String, dynamic>>();
+      obtainedResults = mapsList;
       setState(() {
         canQuery = true;
         hasLoaded = true;

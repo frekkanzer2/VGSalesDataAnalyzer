@@ -4,6 +4,72 @@ class OperationContainer {
   static List<String> _attributes = [];
   static Map<String, dynamic> _formattedQuery = new Map();
 
+  // Aggregation variables
+  static bool _aggregationEnabled = false;
+  static int _aggregation_limit = -1;
+  static int _aggregation_skip = -1;
+  static String _aggregation_attribute = "";
+  static String _aggregation_attribute_value = "";
+
+  String aggregation_getOutput() {
+    String buffer = "";
+    if (!_aggregationEnabled) buffer = "Nessuna aggregazione attiva";
+    else {
+      buffer += "\$match : { " + _aggregation_attribute + " : " + _aggregation_attribute_value + " }";
+      if (_aggregation_limit > 0) buffer += "\n\$limit : " + _aggregation_limit.toString();
+      if (_aggregation_skip > 0) buffer += "\n\$skip : " + _aggregation_skip.toString();
+    }
+    return buffer;
+  }
+
+  bool aggregation_isEnabled() {
+    return _aggregationEnabled;
+  }
+
+  void aggregation_setEnabled(bool isEnabled) {
+    _aggregationEnabled = isEnabled;
+  }
+
+  void aggregation_setAttribute(String attr) {
+    if (_aggregationEnabled) _aggregation_attribute = attr;
+    else _aggregation_attribute = "";
+  }
+
+  String aggregation_getAttribute() {
+    if (_aggregationEnabled) return _aggregation_attribute;
+    return "";
+  }
+
+  void aggregation_setAttributeValue(String value) {
+    if (_aggregationEnabled) _aggregation_attribute_value = value;
+    else _aggregation_attribute_value = "";
+  }
+
+  String aggregation_getAttributeValue() {
+    if (_aggregationEnabled) return _aggregation_attribute_value;
+    return "";
+  }
+
+  void aggregation_setLimit(int limit) {
+    if (_aggregationEnabled) _aggregation_limit = limit;
+    else _aggregation_limit = -1;
+  }
+
+  int aggregation_getLimit() {
+    if (_aggregationEnabled) return _aggregation_limit;
+    return -1;
+  }
+
+  void aggregation_setSkip(int skip) {
+    if (_aggregationEnabled) _aggregation_skip = skip;
+    else _aggregation_skip = -1;
+  }
+
+  int aggregation_getSkip() {
+    if (_aggregationEnabled) return _aggregation_skip;
+    return -1;
+  }
+
   void addOperation(String attributeName, String input) {
     _formattedQuery[attributeName] = {r"$regex": input};
     if (_attributes.contains(attributeName)) {

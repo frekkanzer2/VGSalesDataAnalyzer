@@ -48,12 +48,14 @@ class _MyHomePageState extends State<MyHomePage> {
                 backgroundColor: custom_Black_80,
               ),
               // FIRST CONTAINER
+              (centered_subpage < 4) ?
+                  // STANDARD EXPANDED
               Expanded(
                 child: Container(
                   width: MediaQuery.of(context).size.width,
                   padding: EdgeInsets.fromLTRB(12, 8, 12, 8),
                   color: custom_Black_70,
-                  child: (oc.getOperations().length > 0) ?
+                  child: (oc.getOperations().length > 0 && !oc.aggregation_isEnabled()) ?
                     new ListView.builder(
                       padding: EdgeInsets.zero,
                       itemCount: oc.getOperations().length,
@@ -126,14 +128,74 @@ class _MyHomePageState extends State<MyHomePage> {
                           ]
                         );
                       }
-                    ) :
+                    ) : (!oc.aggregation_isEnabled()) ?
                     AutoSizeText(
                       "Non è stato registrato alcun criterio",
                       style: TextStyle(
                         color: custom_White_70,
                         fontSize: 16,
                       ),
-                    ),
+                    ) : AutoSizeText(
+                      "AGGREGAZIONE ATTIVA",
+                      style: TextStyle(
+                        color: custom_White_70,
+                        fontSize: 16,
+                      ),
+                    )
+                ),
+                flex: 3,
+              ) : Expanded(
+                // EXPANDED FOR AGGREGATION
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  padding: EdgeInsets.fromLTRB(20, 16, 20, 8),
+                  color: custom_Black_70,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      AutoSizeText(
+                        oc.aggregation_getOutput(),
+                        style: TextStyle(
+                          color: custom_White_70,
+                          fontSize: 18,
+                        ),
+                      ),
+                      Expanded(child: Container(), flex: 1),
+                      (oc.aggregation_isEnabled()) ?
+                      TextButton(
+                        onPressed: () {
+                          oc.aggregation_setAttribute("");
+                          oc.aggregation_setAttributeValue("");
+                          oc.aggregation_setEnabled(false);
+                          change_subpage(4);
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: custom_White_70,
+                            border: Border.all(
+                              color: custom_Black_100,
+                              width: 2,
+                            ),
+                            borderRadius: new BorderRadius.only(
+                              topLeft: const Radius.circular(8.0),
+                              topRight: const Radius.circular(8.0),
+                              bottomLeft: const Radius.circular(8.0),
+                              bottomRight: const Radius.circular(8.0),
+                            ),
+                          ),
+                          height: 36,
+                          child: Center(
+                            child: AutoSizeText(
+                              "Rimuovi aggregazione",
+                              style: TextStyle(
+                                color: custom_Black_100,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ) : Container(),
+                    ],
+                  ),
                 ),
                 flex: 3,
               ),
@@ -249,7 +311,9 @@ class _CenteredSectionState extends State<CenteredSection> {
   TextEditingController inputRangeEndHandler = new TextEditingController();
   TextEditingController inputLimitHandler = new TextEditingController();
   TextEditingController inputSkipHandler = new TextEditingController();
+  TextEditingController inputAttributeValueHandler = new TextEditingController();
   String choiseHandler = "";
+  String errorHandler = "";
 
   @override
   Widget build(BuildContext context) {
@@ -786,6 +850,13 @@ class _CenteredSectionState extends State<CenteredSection> {
                   button_text: "Gestione aggregazione",
                   hasBorders: true,
                   callback: () {
+                    OperationContainer oc = new OperationContainer();
+                    if (!oc.aggregation_isEnabled()) {
+                      choiseHandler = "";
+                      inputAttributeValueHandler.text = "";
+                      inputSkipHandler.text = "";
+                      inputLimitHandler.text = "";
+                    }
                     widget.hpage.change_subpage(4);
                   },
                 ),
@@ -850,10 +921,6 @@ class _CenteredSectionState extends State<CenteredSection> {
                 },
                 dataSource: [
                   {
-                    "display" : "Rank",
-                    "value" : "Rank",
-                  },
-                  {
                     "display" : "Nome",
                     "value" : "Name",
                   },
@@ -873,29 +940,51 @@ class _CenteredSectionState extends State<CenteredSection> {
                     "display" : "Publisher",
                     "value" : "Publisher",
                   },
-                  {
-                    "display" : "Vendite in Nord America",
-                    "value" : "NA_Sales",
-                  },
-                  {
-                    "display" : "Vendite in Europa",
-                    "value" : "EU_Sales",
-                  },
-                  {
-                    "display" : "Vendite in Giappone",
-                    "value" : "JP_Sales",
-                  },
-                  {
-                    "display" : "Vendite in altri paesi",
-                    "value" : "Other_Sales",
-                  },
-                  {
-                    "display" : "Vendite nel mondo",
-                    "value" : "Global_Sales",
-                  },
                 ],
                 textField: 'display',
                 valueField: 'value',
+              ),
+              Container(height: 16,),
+              Container(
+                padding: EdgeInsets.only(left: 20, right: 20),
+                child: TextFormField(
+                  controller: inputAttributeValueHandler,
+                  maxLines: 1,
+                  style: TextStyle(
+                    color: custom_White_70,
+                    fontSize: 20,
+                  ),
+                  textAlign: TextAlign.center,
+                  decoration: InputDecoration(
+                    hintText: "Valore per l'aggregazione",
+                    hintStyle: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 18,
+                    ),
+                    border: UnderlineInputBorder(),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                          color: custom_White_70,
+                          width: 2.0
+                      ),
+                      borderRadius: BorderRadius.circular(25.0),
+                    ),
+                    focusedErrorBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                          color: custom_White_70,
+                          width: 2.0
+                      ),
+                      borderRadius: BorderRadius.circular(25.0),
+                    ),
+                    errorBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                          color: custom_Black_70,
+                          width: 2.0
+                      ),
+                      borderRadius: BorderRadius.circular(25.0),
+                    ),
+                  ),
+                ),
               ),
               Expanded(child: Container(), flex: 1,),
               Container(
@@ -989,7 +1078,7 @@ class _CenteredSectionState extends State<CenteredSection> {
                     width: 140,
                     child: TextButton(
                       child: AutoSizeText(
-                        "Annulla",
+                        "Indietro",
                         maxLines: 1,
                         overflow: TextOverflow.fade,
                         minFontSize: 14,
@@ -1030,7 +1119,31 @@ class _CenteredSectionState extends State<CenteredSection> {
                         ),
                       ),
                       onPressed: () {
-
+                        String _inLimit, _inSkip, _inSelected, _inSelectedValue;
+                        _inSelected = choiseHandler;
+                        _inSelectedValue = inputAttributeValueHandler.text;
+                        _inLimit = inputLimitHandler.text;
+                        _inSkip = inputSkipHandler.text;
+                        bool hasLimit = true, hasSkip = true, hasAttribute = true, hasAttributeValue = true;
+                        if (_inLimit == null || _inLimit == "" || _inLimit == "0") hasLimit = false;
+                        if (_inSkip == null || _inSkip == "" || _inSkip == "0") hasSkip = false;
+                        if (_inSelectedValue == null || _inSelectedValue == "") hasAttributeValue = false;
+                        if (_inSelected == "") hasAttribute = false;
+                        // Checks
+                        OperationContainer oc = new OperationContainer();
+                        if (hasAttribute && hasAttributeValue) {
+                          oc.aggregation_setEnabled(true);
+                          oc.aggregation_setAttribute(_inSelected);
+                          oc.aggregation_setAttributeValue(_inSelectedValue);
+                          if (hasLimit) oc.aggregation_setLimit(int.parse(_inLimit));
+                          else oc.aggregation_setLimit(-1);
+                          if (hasSkip) oc.aggregation_setSkip(int.parse(_inSkip));
+                          else oc.aggregation_setSkip(-1);
+                        } else {
+                          oc.aggregation_setEnabled(false);
+                          errorHandler = "Scegli un attributo e un valore";
+                        }
+                        widget.hpage.change_subpage(4);
                       },
                     ),
                     decoration: BoxDecoration(
