@@ -6,6 +6,7 @@ import 'package:queryapp/Beans/operation_container.dart';
 import 'package:queryapp/Utils/custom_colors.dart';
 import 'package:queryapp/Utils/custom_widgets.dart';
 import 'package:queryapp/View/result_page.dart';
+import 'package:queryapp/View/index_page.dart';
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key? key}) : super(key: key);
@@ -781,7 +782,13 @@ class _CenteredSectionState extends State<CenteredSection> {
                     hasBorders: true,
                     callback: () => {
                       // Reindirizzamento alla pagina di Gestione indici
-
+                      Navigator.push(
+                        context,
+                        PageTransition(
+                          type: PageTransitionType.bottomToTop,
+                          child: IndexPage(),
+                        ),
+                      )
                     },
                 ),
               ],
