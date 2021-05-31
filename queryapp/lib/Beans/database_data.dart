@@ -1,3 +1,4 @@
 String username = "user";
 String password = "user";
-String databaseAddress = "mongodb+srv://" + username + ":" + password + "@vgsales.x71p0.mongodb.net/myFirstDatabase?retryWrites=true&w=majority;";
+String collection_name = "main_data";
+String databaseAddress = "mongodb+srv://" + username + ":" + password + "@vgsales.x71p0.mongodb.net/vgsales?retryWrites=true&w=majority;";
