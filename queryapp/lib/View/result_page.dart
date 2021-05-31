@@ -131,73 +131,80 @@ class _ResultsPageState extends State<ResultsPage> {
                             itemBuilder: (context, index) {
                               return Container(
                                 margin: EdgeInsets.only(bottom: 6),
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      child: Container(
-                                        height: 60,
-                                        padding: EdgeInsets.only(left: 8, right: 10),
-                                        decoration: BoxDecoration(
-                                          color: custom_White_70,
-                                          border: Border.all(
-                                            color: custom_Black_100,
-                                            width: 2,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    showAlertDialog(context, obtainedResults[index]);
+                                  },
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: Container(
+                                          height: 60,
+                                          padding: EdgeInsets.only(left: 8, right: 10),
+                                          decoration: BoxDecoration(
+                                            color: custom_White_70,
+                                            border: Border.all(
+                                              color: custom_Black_100,
+                                              width: 2,
+                                            ),
+                                            borderRadius: new BorderRadius.only(
+                                              topLeft: const Radius.circular(8.0),
+                                              topRight: const Radius.circular(8.0),
+                                              bottomLeft: const Radius.circular(8.0),
+                                              bottomRight: const Radius.circular(8.0),
+                                            ),
                                           ),
-                                          borderRadius: new BorderRadius.only(
-                                            topLeft: const Radius.circular(8.0),
-                                            topRight: const Radius.circular(8.0),
-                                            bottomLeft: const Radius.circular(8.0),
-                                            bottomRight: const Radius.circular(8.0),
-                                          ),
-                                        ),
-                                        child: Align(
-                                          alignment: Alignment.centerLeft,
-                                          child: Column(
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              AutoSizeText(
-                                                obtainedResults[index]["Name"],
-                                                overflow: TextOverflow.clip,
-                                                maxLines: 1,
-                                                minFontSize: 14,
-                                                style: TextStyle(
-                                                  color: custom_Black_100,
-                                                  fontSize: 24,
+                                          child: Align(
+                                            alignment: Alignment.centerLeft,
+                                            child: Column(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                AutoSizeText(
+                                                  obtainedResults[index]["Name"],
+                                                  overflow: TextOverflow.clip,
+                                                  maxLines: 1,
+                                                  minFontSize: 14,
+                                                  style: TextStyle(
+                                                    color: custom_Black_100,
+                                                    fontSize: 24,
+                                                  ),
                                                 ),
-                                              ),
-                                              Row(
-                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                children: [
-                                                  AutoSizeText(
-                                                    obtainedResults[index]["Platform"],
-                                                    overflow: TextOverflow.clip,
-                                                    maxLines: 1,
-                                                    minFontSize: 10,
-                                                    style: TextStyle(
-                                                      color: custom_Black_100,
-                                                      fontSize: 16,
+                                                Row(
+                                                  children: [
+                                                    AutoSizeText(
+                                                      obtainedResults[index]["Platform"],
+                                                      overflow: TextOverflow.clip,
+                                                      maxLines: 1,
+                                                      minFontSize: 10,
+                                                      style: TextStyle(
+                                                        color: custom_Black_100,
+                                                        fontSize: 16,
+                                                      ),
                                                     ),
-                                                  ),
-                                                  AutoSizeText(
-                                                    obtainedResults[index]["Publisher"],
-                                                    overflow: TextOverflow.clip,
-                                                    maxLines: 1,
-                                                    minFontSize: 10,
-                                                    style: TextStyle(
-                                                      color: custom_Black_100,
-                                                      fontSize: 16,
+                                                    Expanded(child: Container()),
+                                                    Container(
+                                                      child: AutoSizeText(
+                                                        obtainedResults[index]["Publisher"],
+                                                        overflow: TextOverflow.ellipsis,
+                                                        maxLines: 1,
+                                                        minFontSize: 10,
+                                                        style: TextStyle(
+                                                          color: custom_Black_100,
+                                                          fontSize: 16,
+                                                        ),
+                                                      ),
                                                     ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                      flex: 1,
-                                    )
-                                  ],
+                                        flex: 1,
+                                      )
+                                    ],
+                                  ),
                                 ),
                               );
                             },
@@ -281,6 +288,156 @@ class _ResultsPageState extends State<ResultsPage> {
   Future<bool> _onBackPressed() async {
     if (!hasLoaded) return false;
     else return true;
+  }
+
+  showAlertDialog(BuildContext context, Map<String, dynamic> item) {
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (_) => Dialog(
+        elevation: 24,
+        insetPadding: EdgeInsets.fromLTRB(30, 150, 30, 150),
+        backgroundColor: Colors.transparent,
+        child: Center(
+          child: Container(
+            padding: EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              color: custom_Black_70,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Align(
+                  alignment: Alignment.center,
+                  child: Container(
+                    margin: EdgeInsets.only(bottom: 16),
+                    child: AutoSizeText(
+                      item["Name"],
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      minFontSize: 16,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: custom_White_70,
+                        fontSize: 26,
+                      ),
+                    ),
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(bottom: 16),
+                  child: SectionDivider(),
+                ),
+                AutoSizeText(
+                  "Rank: " + item["Rank"].toString(),
+                  maxLines: 1,
+                  minFontSize: 14,
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                    color: custom_White_70,
+                    fontSize: 18,
+                  ),
+                ),
+                AutoSizeText(
+                  "Pubblicato nel " + item["Year"].toString(),
+                  maxLines: 1,
+                  minFontSize: 14,
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                    color: custom_White_70,
+                    fontSize: 18,
+                  ),
+                ),
+                AutoSizeText(
+                  "Piattaforma: " + item["Platform"].toString(),
+                  maxLines: 1,
+                  minFontSize: 14,
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                    color: custom_White_70,
+                    fontSize: 18,
+                  ),
+                ),
+                AutoSizeText(
+                  "Publisher: " + item["Publisher"].toString(),
+                  maxLines: 1,
+                  minFontSize: 14,
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                    color: custom_White_70,
+                    fontSize: 18,
+                  ),
+                ),
+                AutoSizeText(
+                  "Genere: " + item["Genre"].toString(),
+                  maxLines: 1,
+                  minFontSize: 14,
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                    color: custom_White_70,
+                    fontSize: 18,
+                  ),
+                ),
+                AutoSizeText(
+                  "Vendite in Nord America: " + item["NA_Sales"].toString() + " MLN",
+                  maxLines: 1,
+                  minFontSize: 14,
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                    color: custom_White_70,
+                    fontSize: 18,
+                  ),
+                ),
+                AutoSizeText(
+                  "Vendite in Europa: " + item["EU_Sales"].toString() + " MLN",
+                  maxLines: 1,
+                  minFontSize: 14,
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                    color: custom_White_70,
+                    fontSize: 18,
+                  ),
+                ),
+                AutoSizeText(
+                  "Vendite in Giappone: " + item["JP_Sales"].toString() + " MLN",
+                  maxLines: 1,
+                  minFontSize: 14,
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                    color: custom_White_70,
+                    fontSize: 18,
+                  ),
+                ),
+                AutoSizeText(
+                  "Vendite in altri paesi: " + item["Other_Sales"].toString() + " MLN",
+                  maxLines: 1,
+                  minFontSize: 14,
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                    color: custom_White_70,
+                    fontSize: 18,
+                  ),
+                ),
+                AutoSizeText(
+                  "Vendite nel mondo: " + item["Global_Sales"].toString() + " MLN",
+                  maxLines: 1,
+                  minFontSize: 14,
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                    color: custom_White_70,
+                    fontSize: 18,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        )
+      )
+    );
+
   }
 
 }
