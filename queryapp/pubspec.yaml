@@ -22,7 +22,8 @@ environment:
 
 dependencies:
   auto_size_text: ^2.1.0
-  animations: ^2.0.0
+  page_transition: "^2.0.2"
+  mongo_dart: ^0.7.0+2
   flutter:
     sdk: flutter
 

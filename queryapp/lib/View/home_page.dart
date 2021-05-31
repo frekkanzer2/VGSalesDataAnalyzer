@@ -1,9 +1,11 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:queryapp/Beans/operation_container.dart';
 import 'package:queryapp/Utils/custom_colors.dart';
 import 'package:queryapp/Utils/custom_widgets.dart';
+import 'package:queryapp/View/result_page.dart';
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key? key}) : super(key: key);
@@ -160,7 +162,15 @@ class _MyHomePageState extends State<MyHomePage> {
                         button_text: "Esegui",
                         hasBorders: false,
                         callback: () {
-
+                          OperationContainer oc = new OperationContainer();
+                          print(oc.getQuery());
+                          Navigator.push(
+                            context,
+                            PageTransition(
+                              type: PageTransitionType.bottomToTop,
+                              child: ResultsPage(),
+                            ),
+                          );
                         },
                       ),
                     ],

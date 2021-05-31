@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
+import 'package:queryapp/Beans/operation_container.dart';
 import 'package:queryapp/Utils/custom_colors.dart';
 import 'package:queryapp/Utils/custom_widgets.dart';
+import 'package:queryapp/View/home_page.dart';
 
 class ResultsPage extends StatefulWidget {
   @override
@@ -37,7 +40,30 @@ class _ResultsPageState extends State<ResultsPage> {
               SectionDivider(),
               // SECOND CONTAINER
               Expanded(
-                child: Container(color: Colors.blue,),
+                child: Container(
+                  color: custom_Black_70,
+                  padding: EdgeInsets.only(left: 12, right: 12),
+                  child: Row(
+                    children: [
+                      AttributeButtonSelection(
+                        button_text: "Nuova ricerca",
+                        hasBorders: false,
+                        callback: () {
+                          OperationContainer oc = new OperationContainer();
+                          oc.reset();
+                          Navigator.pushAndRemoveUntil(
+                              context,
+                              PageTransition(
+                                type: PageTransitionType.topToBottom,
+                                child: MyHomePage(),
+                              ),
+                              ModalRoute.withName("/Home"),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                ),
                 flex: 1,
               ),
             ],
