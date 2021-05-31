@@ -7,6 +7,7 @@ import 'package:queryapp/Utils/custom_colors.dart';
 import 'package:queryapp/Utils/custom_widgets.dart';
 import 'package:queryapp/View/result_page.dart';
 import 'package:queryapp/View/index_page.dart';
+import 'package:queryapp/View/sort_page.dart';
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key? key}) : super(key: key);
@@ -800,7 +801,13 @@ class _CenteredSectionState extends State<CenteredSection> {
                   hasBorders: true,
                   callback: () => {
                     // Reindirizzamento alla pagina di Gestione ordinamenti
-
+                    Navigator.push(
+                      context,
+                      PageTransition(
+                        type: PageTransitionType.bottomToTop,
+                        child: SortPage(),
+                      ),
+                    )
                   },
                 ),
               ],
