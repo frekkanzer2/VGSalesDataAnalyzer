@@ -146,24 +146,35 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               SectionDivider(),
               // THIRD CONTAINER
-              (centered_subpage == 0) ?
+              (centered_subpage == 0 || centered_subpage == 3) ?
               Expanded(
                 child: Container(
                   color: custom_Black_70,
                   padding: EdgeInsets.only(left: 12, right: 12),
                   child: Row(
                     children: [
+
+                      (centered_subpage == 3) ?
+                      AttributeButtonSelection(
+                        button_text: "Indietro",
+                        hasBorders: false,
+                        callback: () {
+                          change_subpage(0);
+                        },
+                      ) :
+
                       AttributeButtonSelection(
                         button_text: "Avanzate",
                         hasBorders: false,
-                        callback: () {},
+                        callback: () {
+                          change_subpage(3);
+                        },
                       ),
+
                       AttributeButtonSelection(
                         button_text: "Esegui",
                         hasBorders: false,
                         callback: () {
-                          OperationContainer oc = new OperationContainer();
-                          print(oc.getQuery());
                           Navigator.push(
                             context,
                             PageTransition(
@@ -211,6 +222,8 @@ class _CenteredSectionState extends State<CenteredSection> {
     } else if (name == "Name" || name == "Platform" || name == "Genre" ||
         name == "Publisher") {
       widget.hpage.change_subpage(2);
+    } else if (name == "Avanzate"){
+      widget.hpage.change_subpage(3);
     }
   }
 
@@ -236,7 +249,7 @@ class _CenteredSectionState extends State<CenteredSection> {
   @override
   Widget build(BuildContext context) {
 
-    if (widget.state > 2 || widget.state < 0) widget.state = 0;
+    if (widget.state > 3 || widget.state < 0) widget.state = 0;
 
     return Container(
       color: custom_Black_80,
@@ -753,6 +766,57 @@ class _CenteredSectionState extends State<CenteredSection> {
           ],
         ),
       )
+
+      // state 3 -> advanced
+
+      : (widget.state == 3) ? new Container(
+        padding: EdgeInsets.fromLTRB(12, 10, 12, 10),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Row(
+              children: [
+                AttributeButtonSelection(
+                    button_text: "Gestione indici",
+                    hasBorders: true,
+                    callback: () => {
+                      // Reindirizzamento alla pagina di Gestione indici
+
+                    },
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                AttributeButtonSelection(
+                  button_text: "Gestione ordinamenti",
+                  hasBorders: true,
+                  callback: () => {
+                    // Reindirizzamento alla pagina di Gestione ordinamenti
+
+                  },
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                AttributeButtonSelection(
+                  button_text: "Altro",
+                  hasBorders: true,
+                  callback: () => {
+                    // Reindirizzamento alla pagina Altro
+
+
+                  },
+                ),
+              ],
+            ),
+
+          ],
+        ),
+
+      )
+
       // unreachable case
       : Container( color: Colors.red, ),
 
