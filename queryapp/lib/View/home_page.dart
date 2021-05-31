@@ -3,10 +3,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:queryapp/Beans/operation_container.dart';
+import 'package:queryapp/EditedPlugins/dropdown_form_field.dart';
 import 'package:queryapp/Utils/custom_colors.dart';
 import 'package:queryapp/Utils/custom_widgets.dart';
 import 'package:queryapp/View/result_page.dart';
-import 'package:queryapp/View/index_page.dart';
 import 'package:queryapp/View/sort_page.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -247,11 +247,14 @@ class _CenteredSectionState extends State<CenteredSection> {
   TextEditingController inputHandler = new TextEditingController();
   TextEditingController inputRangeStartHandler = new TextEditingController();
   TextEditingController inputRangeEndHandler = new TextEditingController();
+  TextEditingController inputLimitHandler = new TextEditingController();
+  TextEditingController inputSkipHandler = new TextEditingController();
+  String choiseHandler = "";
 
   @override
   Widget build(BuildContext context) {
 
-    if (widget.state > 3 || widget.state < 0) widget.state = 0;
+    if (widget.state > 5 || widget.state < 0) widget.state = 0;
 
     return Container(
       color: custom_Black_80,
@@ -769,37 +772,35 @@ class _CenteredSectionState extends State<CenteredSection> {
         ),
       )
 
-      // state 3 -> advanced
+      // state 3 -> advanced section
 
       : (widget.state == 3) ? new Container(
         padding: EdgeInsets.fromLTRB(12, 10, 12, 10),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Row(
               children: [
-                AttributeButtonSelection(
-                    button_text: "Gestione indici",
-                    hasBorders: true,
-                    callback: () => {
-                      // Reindirizzamento alla pagina di Gestione indici
-                      Navigator.push(
-                        context,
-                        PageTransition(
-                          type: PageTransitionType.bottomToTop,
-                          child: IndexPage(),
-                        ),
-                      )
-                    },
+                AttributeBigButtonSelection(
+                  size: 100,
+                  button_text: "Gestione aggregazione",
+                  hasBorders: true,
+                  callback: () {
+                    widget.hpage.change_subpage(4);
+                  },
                 ),
               ],
             ),
+            Container(
+              height: 24,
+            ),
             Row(
               children: [
-                AttributeButtonSelection(
+                AttributeBigButtonSelection(
+                  size: 100,
                   button_text: "Gestione ordinamenti",
                   hasBorders: true,
-                  callback: () => {
+                  callback: () {
                     // Reindirizzamento alla pagina di Gestione ordinamenti
                     Navigator.push(
                       context,
@@ -807,29 +808,255 @@ class _CenteredSectionState extends State<CenteredSection> {
                         type: PageTransitionType.bottomToTop,
                         child: SortPage(),
                       ),
-                    )
+                    );
                   },
                 ),
               ],
             ),
-            Row(
-              children: [
-                AttributeButtonSelection(
-                  button_text: "Altro",
-                  hasBorders: true,
-                  callback: () => {
-                    // Reindirizzamento alla pagina Altro
-
-
-                  },
-                ),
-              ],
-            ),
-
           ],
         ),
-
       )
+
+      // state 4 -> aggregation section
+
+      : (widget.state == 4) ? new Container(
+        child: Container(
+          padding: EdgeInsets.fromLTRB(12, 18, 12, 20),
+          child: Column(
+            children: [
+              Container(
+                child: AutoSizeText(
+                  "Aggregazione",
+                  style: TextStyle(
+                    color: custom_White_70,
+                    fontSize: 24,
+                  ),
+                ),
+              ),
+              Expanded(child: Container(), flex: 1,),
+              DropDownFormField(
+                titleText: "Attributo da aggregare",
+                hintText: "Scegli un attributo",
+                value: choiseHandler,
+                onSaved: (value) {
+                  setState(() {
+                    choiseHandler = value;
+                  });
+                },
+                onChanged: (value) {
+                  setState(() {
+                    choiseHandler = value;
+                  });
+                },
+                dataSource: [
+                  {
+                    "display" : "Rank",
+                    "value" : "Rank",
+                  },
+                  {
+                    "display" : "Nome",
+                    "value" : "Name",
+                  },
+                  {
+                    "display" : "Piattaforma",
+                    "value" : "Platform",
+                  },
+                  {
+                    "display" : "Anno",
+                    "value" : "Year",
+                  },
+                  {
+                    "display" : "Genere",
+                    "value" : "Genre",
+                  },
+                  {
+                    "display" : "Publisher",
+                    "value" : "Publisher",
+                  },
+                  {
+                    "display" : "Vendite in Nord America",
+                    "value" : "NA_Sales",
+                  },
+                  {
+                    "display" : "Vendite in Europa",
+                    "value" : "EU_Sales",
+                  },
+                  {
+                    "display" : "Vendite in Giappone",
+                    "value" : "JP_Sales",
+                  },
+                  {
+                    "display" : "Vendite in altri paesi",
+                    "value" : "Other_Sales",
+                  },
+                  {
+                    "display" : "Vendite nel mondo",
+                    "value" : "Global_Sales",
+                  },
+                ],
+                textField: 'display',
+                valueField: 'value',
+              ),
+              Expanded(child: Container(), flex: 1,),
+              Container(
+                padding: EdgeInsets.only(left: 20, right: 20),
+                child: TextFormField(
+                  controller: inputLimitHandler,
+                  maxLines: 1,
+                  style: TextStyle(
+                    color: custom_White_70,
+                    fontSize: 20,
+                  ),
+                  textAlign: TextAlign.center,
+                  decoration: InputDecoration(
+                    hintText: "Parametro limit",
+                    hintStyle: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 18,
+                    ),
+                    border: UnderlineInputBorder(),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                          color: custom_White_70,
+                          width: 2.0
+                      ),
+                      borderRadius: BorderRadius.circular(25.0),
+                    ),
+                    focusedErrorBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                          color: custom_White_70,
+                          width: 2.0
+                      ),
+                      borderRadius: BorderRadius.circular(25.0),
+                    ),
+                    errorBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                          color: custom_Black_70,
+                          width: 2.0
+                      ),
+                      borderRadius: BorderRadius.circular(25.0),
+                    ),
+                  ),
+                ),
+              ),
+              Container(height: 16,),
+              Container(
+                padding: EdgeInsets.only(left: 20, right: 20),
+                child: TextFormField(
+                  controller: inputSkipHandler,
+                  maxLines: 1,
+                  style: TextStyle(
+                    color: custom_White_70,
+                    fontSize: 20,
+                  ),
+                  textAlign: TextAlign.center,
+                  decoration: InputDecoration(
+                    hintText: "Parametro skip",
+                    hintStyle: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 18,
+                    ),
+                    border: UnderlineInputBorder(),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                          color: custom_White_70,
+                          width: 2.0
+                      ),
+                      borderRadius: BorderRadius.circular(25.0),
+                    ),
+                    focusedErrorBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                          color: custom_White_70,
+                          width: 2.0
+                      ),
+                      borderRadius: BorderRadius.circular(25.0),
+                    ),
+                    errorBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                          color: custom_Black_70,
+                          width: 2.0
+                      ),
+                      borderRadius: BorderRadius.circular(25.0),
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(child: Container(), flex: 2,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Container(
+                    width: 140,
+                    child: TextButton(
+                      child: AutoSizeText(
+                        "Annulla",
+                        maxLines: 1,
+                        overflow: TextOverflow.fade,
+                        minFontSize: 14,
+                        style: TextStyle(
+                          color: custom_White_70,
+                          fontSize: 18,
+                        ),
+                      ),
+                      onPressed: () => {
+                        widget.hpage.change_subpage(3), // Go back
+                      },
+                    ),
+                    decoration: BoxDecoration(
+                      color: custom_Black_70,
+                      border: Border.all(
+                        color: custom_Black_100,
+                        width: 2,
+                      ),
+                      borderRadius: new BorderRadius.only(
+                        topLeft: const Radius.circular(8.0),
+                        topRight: const Radius.circular(8.0),
+                        bottomLeft: const Radius.circular(8.0),
+                        bottomRight: const Radius.circular(8.0),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    width: 140,
+                    child: TextButton(
+                      child: AutoSizeText(
+                        "Conferma",
+                        maxLines: 1,
+                        overflow: TextOverflow.fade,
+                        minFontSize: 14,
+                        style: TextStyle(
+                          color: custom_White_70,
+                          fontSize: 18,
+                        ),
+                      ),
+                      onPressed: () {
+
+                      },
+                    ),
+                    decoration: BoxDecoration(
+                      color: custom_Black_70,
+                      border: Border.all(
+                        color: custom_Black_100,
+                        width: 2,
+                      ),
+                      borderRadius: new BorderRadius.only(
+                        topLeft: const Radius.circular(8.0),
+                        topRight: const Radius.circular(8.0),
+                        bottomLeft: const Radius.circular(8.0),
+                        bottomRight: const Radius.circular(8.0),
+                      ),
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ),
+        ),
+      )
+
+        // state 5 -> order section
+
+      : (widget.state == 5) ? new Container()
 
       // unreachable case
       : Container( color: Colors.red, ),

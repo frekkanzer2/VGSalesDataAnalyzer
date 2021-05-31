@@ -62,4 +62,54 @@ class _AttributeButtonSelectionState extends State<AttributeButtonSelection> {
   }
 }
 
+class AttributeBigButtonSelection extends StatefulWidget {
+  AttributeBigButtonSelection({Key? key, required this.button_text,
+    required this.callback, required this.hasBorders, required this.size}) : super(key: key);
+
+  String button_text = "";
+  VoidCallback callback;
+  bool hasBorders = true;
+  double size = 0.0;
+
+  @override
+  _AttributeBigButtonSelectionState createState() => _AttributeBigButtonSelectionState();
+}
+
+class _AttributeBigButtonSelectionState extends State<AttributeBigButtonSelection> {
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Container(
+        height: widget.size,
+        child: TextButton(
+          child: AutoSizeText(
+            widget.button_text,
+            maxLines: 1,
+            overflow: TextOverflow.fade,
+            minFontSize: 14,
+            style: TextStyle(
+              color: custom_White_70,
+              fontSize: 18,
+            ),
+          ),
+          onPressed: widget.callback,
+        ),
+        decoration: BoxDecoration(
+          color: custom_Black_70,
+          border: (widget.hasBorders) ? Border.all(
+            color: custom_Black_100,
+            width: 2,
+          ) : null,
+          borderRadius: new BorderRadius.only(
+            topLeft: const Radius.circular(8.0),
+            topRight: const Radius.circular(8.0),
+            bottomLeft: const Radius.circular(8.0),
+            bottomRight: const Radius.circular(8.0),
+          ),
+        ),
+      ),
+      flex: 1,
+    );
+  }
+}
 
