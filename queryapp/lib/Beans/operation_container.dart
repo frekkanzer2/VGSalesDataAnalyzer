@@ -10,6 +10,19 @@ class OperationContainer {
   static int _aggregation_skip = -1;
   static String _aggregation_attribute = "";
   static String _aggregation_attribute_value = "";
+  static String _aggregationError = "";
+
+  void aggregation_setError(String err) {
+    _aggregationError = err;
+  }
+
+  String aggregation_getError(bool delete) {
+    if (delete) {
+      String err = _aggregationError;
+      _aggregationError = "";
+      return err;
+    } else return _aggregationError;
+  }
 
   String aggregation_getOutput() {
     String buffer = "";

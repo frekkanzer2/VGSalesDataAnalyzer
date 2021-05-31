@@ -154,7 +154,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       AutoSizeText(
-                        oc.aggregation_getOutput(),
+                        (oc.aggregation_getError(false) == "") ? oc.aggregation_getOutput() : oc.aggregation_getError(true),
                         style: TextStyle(
                           color: custom_White_70,
                           fontSize: 18,
@@ -313,7 +313,6 @@ class _CenteredSectionState extends State<CenteredSection> {
   TextEditingController inputSkipHandler = new TextEditingController();
   TextEditingController inputAttributeValueHandler = new TextEditingController();
   String choiseHandler = "";
-  String errorHandler = "";
 
   @override
   Widget build(BuildContext context) {
@@ -929,10 +928,6 @@ class _CenteredSectionState extends State<CenteredSection> {
                     "value" : "Platform",
                   },
                   {
-                    "display" : "Anno",
-                    "value" : "Year",
-                  },
-                  {
                     "display" : "Genere",
                     "value" : "Genre",
                   },
@@ -1133,6 +1128,7 @@ class _CenteredSectionState extends State<CenteredSection> {
                         OperationContainer oc = new OperationContainer();
                         if (hasAttribute && hasAttributeValue) {
                           oc.aggregation_setEnabled(true);
+                          oc.aggregation_setError("");
                           oc.aggregation_setAttribute(_inSelected);
                           oc.aggregation_setAttributeValue(_inSelectedValue);
                           if (hasLimit) oc.aggregation_setLimit(int.parse(_inLimit));
@@ -1141,7 +1137,7 @@ class _CenteredSectionState extends State<CenteredSection> {
                           else oc.aggregation_setSkip(-1);
                         } else {
                           oc.aggregation_setEnabled(false);
-                          errorHandler = "Scegli un attributo e un valore";
+                          oc.aggregation_setError("Scegli un attributo e un valore");
                         }
                         widget.hpage.change_subpage(4);
                       },
