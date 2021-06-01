@@ -144,7 +144,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     )
                 ),
                 flex: 3,
-              ) : Expanded(
+              ) : (centered_subpage == 4) ? Expanded(
                 // EXPANDED FOR AGGREGATION
                 child: Container(
                   width: MediaQuery.of(context).size.width,
@@ -187,6 +187,58 @@ class _MyHomePageState extends State<MyHomePage> {
                           child: Center(
                             child: AutoSizeText(
                               "Rimuovi aggregazione",
+                              style: TextStyle(
+                                color: custom_Black_100,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ) : Container(),
+                    ],
+                  ),
+                ),
+                flex: 3,
+              ) : Expanded(
+                // EXPANDED FOR AGGREGATION
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  padding: EdgeInsets.fromLTRB(20, 16, 20, 8),
+                  color: custom_Black_70,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      AutoSizeText(
+                        oc.ordering_getOutput(),
+                        style: TextStyle(
+                          color: custom_White_70,
+                          fontSize: 18,
+                        ),
+                      ),
+                      Expanded(child: Container(), flex: 1),
+                      (oc.ordering_isActive()) ?
+                      TextButton(
+                        onPressed: () {
+                          oc.ordering_reset();
+                          change_subpage(5);
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: custom_White_70,
+                            border: Border.all(
+                              color: custom_Black_100,
+                              width: 2,
+                            ),
+                            borderRadius: new BorderRadius.only(
+                              topLeft: const Radius.circular(8.0),
+                              topRight: const Radius.circular(8.0),
+                              bottomLeft: const Radius.circular(8.0),
+                              bottomRight: const Radius.circular(8.0),
+                            ),
+                          ),
+                          height: 36,
+                          child: Center(
+                            child: AutoSizeText(
+                              "Rimuovi ordinamento",
                               style: TextStyle(
                                 color: custom_Black_100,
                               ),
@@ -313,6 +365,7 @@ class _CenteredSectionState extends State<CenteredSection> {
   TextEditingController inputSkipHandler = new TextEditingController();
   TextEditingController inputAttributeValueHandler = new TextEditingController();
   String choiseHandler = "";
+  String orderChoiseHandler = "";
 
   @override
   Widget build(BuildContext context) {
@@ -871,14 +924,8 @@ class _CenteredSectionState extends State<CenteredSection> {
                   button_text: "Gestione ordinamenti",
                   hasBorders: true,
                   callback: () {
-                    // Reindirizzamento alla pagina di Gestione ordinamenti
-                    Navigator.push(
-                      context,
-                      PageTransition(
-                        type: PageTransitionType.bottomToTop,
-                        child: SortPage(),
-                      ),
-                    );
+
+                    widget.hpage.change_subpage(5);
                   },
                 ),
               ],
@@ -903,7 +950,7 @@ class _CenteredSectionState extends State<CenteredSection> {
                   ),
                 ),
               ),
-              Expanded(child: Container(), flex: 1,),
+              Expanded(child: Container(), flex: 2,),
               DropDownFormField(
                 titleText: "Attributo da aggregare",
                 hintText: "Scegli un attributo",
@@ -1165,7 +1212,170 @@ class _CenteredSectionState extends State<CenteredSection> {
 
         // state 5 -> order section
 
-      : (widget.state == 5) ? new Container()
+      : (widget.state == 5) ? new Container(
+        child: Container(
+          padding: EdgeInsets.fromLTRB(12, 18, 12, 20),
+          child: Column(
+            children: [
+              Container(
+                child: AutoSizeText(
+                  "Ordinamento",
+                  style: TextStyle(
+                    color: custom_White_70,
+                    fontSize: 24,
+                  ),
+                ),
+              ),
+              Expanded(child: Container(), flex: 2,),
+              DropDownFormField(
+                titleText: "Attributo da ordinare",
+                hintText: "Scegli un attributo",
+                value: orderChoiseHandler,
+                onSaved: (value) {
+                  OperationContainer oc = new OperationContainer();
+                  oc.ordering_setAttribute(value);
+                  orderChoiseHandler = value;
+                  widget.hpage.change_subpage(5);
+                },
+                onChanged: (value) {
+                  OperationContainer oc = new OperationContainer();
+                  oc.ordering_setAttribute(value);
+                  orderChoiseHandler = value;
+                  widget.hpage.change_subpage(5);
+                },
+                dataSource: [
+                  {
+                    "display" : "Rank",
+                    "value" : "Rank",
+                  },
+                  {
+                    "display" : "Nome",
+                    "value" : "Name",
+                  },
+                  {
+                    "display" : "Piattaforma",
+                    "value" : "Platform",
+                  },
+                  {
+                    "display" : "Anno",
+                    "value" : "Year",
+                  },
+                  {
+                    "display" : "Genere",
+                    "value" : "Genre",
+                  },
+                  {
+                    "display" : "Publisher",
+                    "value" : "Publisher",
+                  },
+                  {
+                    "display" : "Vendite in Nord America",
+                    "value" : "NA_Sales",
+                  },
+                  {
+                    "display" : "Vendite in Europa",
+                    "value" : "EU_Sales",
+                  },
+                  {
+                    "display" : "Vendite in Giappone",
+                    "value" : "JA_Sales",
+                  },
+                  {
+                    "display" : "Vendite in altri paesi",
+                    "value" : "Other_Sales",
+                  },
+                  {
+                    "display" : "Vendite nel mondo",
+                    "value" : "Global_Sales",
+                  },
+                ],
+                textField: 'display',
+                valueField: 'value',
+              ),
+              Expanded(child: Container(), flex: 2,),
+              Align(
+                alignment: Alignment.center,
+                child: AutoSizeText(
+                  "Tipo di ordinamento",
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: custom_White_70,
+                  ),
+                ),
+              ),
+              Container(height: 16,),
+              Row(
+                children: [
+                  AttributeButtonSelection(
+                    button_text: "Crescente",
+                    hasBorders: true,
+                    callback: () {
+                      OperationContainer oc = new OperationContainer();
+                      oc.ordering_setSense(1);
+                      widget.hpage.change_subpage(5);
+                    },
+                  ),
+                  Container(
+                    width: 10,
+                  ),
+                  AttributeButtonSelection(
+                    button_text: "Decrescente",
+                    hasBorders: true,
+                    callback: () {
+                      OperationContainer oc = new OperationContainer();
+                      oc.ordering_setSense(-1);
+                      widget.hpage.change_subpage(5);
+                    },
+                  ),
+                ],
+              ),
+              Expanded(child: Container(), flex: 4,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Container(
+                    width: 140,
+                    child: TextButton(
+                      child: AutoSizeText(
+                        "Indietro",
+                        maxLines: 1,
+                        overflow: TextOverflow.fade,
+                        minFontSize: 14,
+                        style: TextStyle(
+                          color: custom_White_70,
+                          fontSize: 18,
+                        ),
+                      ),
+                      onPressed: () {
+                        OperationContainer oc = new OperationContainer();
+                        if (!oc.ordering_isActive()) {
+                          oc.ordering_setAttribute("");
+                          oc.ordering_setSense(0);
+                          choiseHandler = "";
+                        }
+                        widget.hpage.change_subpage(3); // Go back
+                      },
+                    ),
+                    decoration: BoxDecoration(
+                      color: custom_Black_70,
+                      border: Border.all(
+                        color: custom_Black_100,
+                        width: 2,
+                      ),
+                      borderRadius: new BorderRadius.only(
+                        topLeft: const Radius.circular(8.0),
+                        topRight: const Radius.circular(8.0),
+                        bottomLeft: const Radius.circular(8.0),
+                        bottomRight: const Radius.circular(8.0),
+                      ),
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ),
+        ),
+      )
 
       // unreachable case
       : Container( color: Colors.red, ),

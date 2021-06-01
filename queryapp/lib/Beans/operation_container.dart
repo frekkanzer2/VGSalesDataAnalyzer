@@ -12,6 +12,48 @@ class OperationContainer {
   static String _aggregation_attribute_value = "";
   static String _aggregationError = "";
 
+  // Order variables
+  static int _orderValue = 0; // -1 decr; 0 no ordering; +1 cresc
+  static String _orderAttribute = "";
+
+  String ordering_getOutput() {
+    String builder = "";
+    if (_orderAttribute != "") builder += "\$order : " + _orderAttribute;
+    else builder += "Attribute not selected";
+    if (_orderValue > 0) builder += "\n\$type : ascending";
+    else if (_orderValue < 0) builder += "\n\$type : discending";
+    else builder += "\nOrdering type not selected";
+    if (ordering_isActive()) builder += "\n\nORDERING ENABLED";
+    else builder += "\n\nORDERING DISABLED";
+    return builder;
+  }
+
+  void ordering_reset() {
+    _orderAttribute = "";
+    _orderValue = 0;
+  }
+
+  bool ordering_isActive() {
+    if (_orderValue != 0 && _orderAttribute != "") return true;
+    else return false;
+  }
+
+  void ordering_setAttribute(String attr) {
+    _orderAttribute = attr;
+  }
+
+  String ordering_getAttribute() {
+    return _orderAttribute;
+  }
+
+  void ordering_setSense(int value) {
+    _orderValue = value;
+  }
+
+  int ordering_getSense() {
+    return _orderValue;
+  }
+
   void aggregation_setError(String err) {
     _aggregationError = err;
   }
