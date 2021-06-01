@@ -14,6 +14,15 @@ class DatabaseUtils {
     if (!oc.ordering_isActive()) return await collection.find(oc.getFormattedQuery()).toList();
     else {
       List<Map<String, dynamic>> retrieved = await collection.find(oc.getFormattedQuery()).toList();
+      int len = retrieved.length;
+      for (int i = 0; i < len; i++) {
+        Map<String, dynamic> _m = retrieved[i];
+        if (_m[oc.ordering_getAttribute()] == null) {
+          retrieved.removeAt(i);
+          i--;
+          len--;
+        }
+      }
       return _mergeSort(retrieved);
     }
   }

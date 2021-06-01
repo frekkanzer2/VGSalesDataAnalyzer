@@ -344,6 +344,7 @@ class _ResultsPageState extends State<ResultsPage> {
                   margin: EdgeInsets.only(bottom: 16),
                   child: SectionDivider(),
                 ),
+                (item["Rank"] != null) ?
                 AutoSizeText(
                   "Rank: " + item["Rank"].toString(),
                   maxLines: 1,
@@ -353,7 +354,8 @@ class _ResultsPageState extends State<ResultsPage> {
                     color: custom_White_70,
                     fontSize: 18,
                   ),
-                ),
+                ) : Container(),
+                (item["Year"] != null) ?
                 AutoSizeText(
                   "Pubblicato nel " + item["Year"].toString(),
                   maxLines: 1,
@@ -363,7 +365,8 @@ class _ResultsPageState extends State<ResultsPage> {
                     color: custom_White_70,
                     fontSize: 18,
                   ),
-                ),
+                ) : Container(),
+                (item["Platform"] != null) ?
                 AutoSizeText(
                   "Piattaforma: " + item["Platform"].toString(),
                   maxLines: 1,
@@ -373,7 +376,8 @@ class _ResultsPageState extends State<ResultsPage> {
                     color: custom_White_70,
                     fontSize: 18,
                   ),
-                ),
+                ) : Container(),
+                (item["Publisher"] != null) ?
                 AutoSizeText(
                   "Publisher: " + item["Publisher"].toString(),
                   maxLines: 1,
@@ -383,7 +387,8 @@ class _ResultsPageState extends State<ResultsPage> {
                     color: custom_White_70,
                     fontSize: 18,
                   ),
-                ),
+                ) : Container(),
+                (item["Genre"] != null) ?
                 AutoSizeText(
                   "Genere: " + item["Genre"].toString(),
                   maxLines: 1,
@@ -393,7 +398,8 @@ class _ResultsPageState extends State<ResultsPage> {
                     color: custom_White_70,
                     fontSize: 18,
                   ),
-                ),
+                ) : Container(),
+                (item["NA_Sales"] != null) ?
                 AutoSizeText(
                   "Vendite in Nord America: " + item["NA_Sales"].toString() + " MLN",
                   maxLines: 1,
@@ -403,7 +409,8 @@ class _ResultsPageState extends State<ResultsPage> {
                     color: custom_White_70,
                     fontSize: 18,
                   ),
-                ),
+                ) : Container(),
+                (item["EU_Sales"] != null) ?
                 AutoSizeText(
                   "Vendite in Europa: " + item["EU_Sales"].toString() + " MLN",
                   maxLines: 1,
@@ -413,7 +420,8 @@ class _ResultsPageState extends State<ResultsPage> {
                     color: custom_White_70,
                     fontSize: 18,
                   ),
-                ),
+                ) : Container(),
+                (item["JP_Sales"] != null) ?
                 AutoSizeText(
                   "Vendite in Giappone: " + item["JP_Sales"].toString() + " MLN",
                   maxLines: 1,
@@ -423,7 +431,8 @@ class _ResultsPageState extends State<ResultsPage> {
                     color: custom_White_70,
                     fontSize: 18,
                   ),
-                ),
+                ) : Container(),
+                (item["Other_Sales"] != null) ?
                 AutoSizeText(
                   "Vendite in altri paesi: " + item["Other_Sales"].toString() + " MLN",
                   maxLines: 1,
@@ -433,7 +442,8 @@ class _ResultsPageState extends State<ResultsPage> {
                     color: custom_White_70,
                     fontSize: 18,
                   ),
-                ),
+                ) : Container(),
+                (item["Global_Sales"] != null) ?
                 AutoSizeText(
                   "Vendite nel mondo: " + item["Global_Sales"].toString() + " MLN",
                   maxLines: 1,
@@ -443,7 +453,7 @@ class _ResultsPageState extends State<ResultsPage> {
                     color: custom_White_70,
                     fontSize: 18,
                   ),
-                ),
+                ) : Container(),
               ],
             ),
           ),
