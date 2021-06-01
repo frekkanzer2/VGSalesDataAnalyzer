@@ -7,7 +7,6 @@ import 'package:queryapp/EditedPlugins/dropdown_form_field.dart';
 import 'package:queryapp/Utils/custom_colors.dart';
 import 'package:queryapp/Utils/custom_widgets.dart';
 import 'package:queryapp/View/result_page.dart';
-import 'package:queryapp/View/sort_page.dart';
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key? key}) : super(key: key);
