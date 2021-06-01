@@ -39,6 +39,18 @@ class DatabaseUtils {
     if (oc.aggregation_getSkip() > 0)
       pip.add({ r"$skip" : oc.aggregation_getSkip() });
     Map aggregateResult = await collection.aggregate(pip, cursor: {});
+    // Counting here
+
+    pip.add({ r"$group" : { "_id" : "totalCount", "count" : { r"$sum" : 1 } }});
+    Map countResult = await collection.aggregate(pip, cursor: {});
+    print(countResult);
+    try {
+      int totalNumb = countResult["cursor"]["firstBatch"][0]["count"];
+      oc.aggregation_setNumbItems(totalNumb.toString());
+    } catch (Exception) {
+      oc.aggregation_setNumbItems("");
+    }
+
     return aggregateResult;
   }
 
@@ -123,9 +135,21 @@ class DatabaseUtils {
   static bool _check(Map<String, dynamic> a, String compareSymbol, Map<String, dynamic> b, OperationContainer oc) {
     String attributeToCheck = oc.ordering_getAttribute();
     if (compareSymbol == ">") {
-      return (a[attributeToCheck] > b[attributeToCheck]);
+      if (a[attributeToCheck] is double || a[attributeToCheck] is int) return (a[attributeToCheck] > b[attributeToCheck]);
+      else {
+        if (a[attributeToCheck] is String) {
+          if (a[attributeToCheck].toString().compareTo(b[attributeToCheck].toString()) > 0) return true;
+          else return false;
+        } else throw new Exception("Type not managed");
+      }
     } else if (compareSymbol == "<") {
-      return (a[attributeToCheck] < b[attributeToCheck]);
+      if (a[attributeToCheck] is double || a[attributeToCheck] is int) return (a[attributeToCheck] < b[attributeToCheck]);
+      else {
+        if (a[attributeToCheck] is String) {
+          if (a[attributeToCheck].toString().compareTo(b[attributeToCheck].toString()) < 0) return true;
+          else return false;
+        } else throw new Exception("Type not managed");
+      }
     } else throw new Exception("Symbol not managed");
   }
 

@@ -66,9 +66,11 @@ class _ResultsPageState extends State<ResultsPage> {
   }
 
   double screen_height = 0;
+  OperationContainer oc = new OperationContainer();
 
   @override
   Widget build(BuildContext context) {
+
     screen_height = MediaQuery.of(context).size.height;
     return WillPopScope(
       onWillPop: _onBackPressed,
@@ -241,7 +243,9 @@ class _ResultsPageState extends State<ResultsPage> {
                             Container(
                               padding: EdgeInsets.only(left: 16, bottom: 1),
                               child: AutoSizeText(
-                                obtainedResults.length.toString() + " risultati ottenuti",
+                                  (oc.aggregation_isEnabled() && oc.aggregation_getNumbItems() != "") ?
+                                "Mostrati " + obtainedResults.length.toString() + " risultati su un totale di " + oc.aggregation_getNumbItems()
+                                : obtainedResults.length.toString() + " risultati ottenuti",
                                 maxLines: 1,
                                 minFontSize: 14,
                                 overflow: TextOverflow.clip,

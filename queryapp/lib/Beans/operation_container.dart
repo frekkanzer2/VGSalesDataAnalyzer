@@ -11,10 +11,19 @@ class OperationContainer {
   static String _aggregation_attribute = "";
   static String _aggregation_attribute_value = "";
   static String _aggregationError = "";
+  static String _totalAggregateItems = "";
 
   // Order variables
   static int _orderValue = 0; // -1 decr; 0 no ordering; +1 cresc
   static String _orderAttribute = "";
+
+  void aggregation_setNumbItems(String items) {
+    _totalAggregateItems = items;
+  }
+
+  String aggregation_getNumbItems() {
+    return _totalAggregateItems;
+  }
 
   String ordering_getOutput() {
     String builder = "";
