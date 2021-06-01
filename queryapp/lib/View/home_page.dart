@@ -656,19 +656,25 @@ class _CenteredSectionState extends State<CenteredSection> {
                         OperationContainer oc = new OperationContainer();
                         bool isEmptyFirst = false;
                         bool isEmptySecond = false;
+                        bool isNegativeFirst = false;
+                        bool isNegativeSecond = false;
+                        bool isStringFirst = false;
+                        bool isStringSecond = false;
                         if ((firstInputSearch == null || firstInputSearch.isEmpty ||
                             firstInputSearch == "" || firstInputSearch == " ")) {
                           isEmptyFirst = true;
-                        }
+                        } else if (isNumNegative(firstInputSearch)) isNegativeFirst = true;
+                        else isStringFirst = true;
                         if ((secondInputSearch == null || secondInputSearch.isEmpty ||
                             secondInputSearch == "" || secondInputSearch == " ")) {
                           isEmptySecond = true;
-                        }
-                        if (!isEmptyFirst && !isEmptySecond)
+                        } else if (isNumNegative(secondInputSearch)) isNegativeSecond = true;
+                        else isStringSecond = true;
+                        if (!isEmptyFirst && !isEmptySecond && !isNegativeFirst && !isNegativeSecond && !isStringFirst && !isStringSecond)
                           oc.addOperationRange(CenteredSection.selectedAttribute, firstInputSearch, secondInputSearch);
-                        else if (!isEmptyFirst)
+                        else if (!isEmptyFirst && !isNegativeFirst && !isStringFirst)
                           oc.addOperationRange(CenteredSection.selectedAttribute, firstInputSearch, "");
-                        else if (!isEmptySecond)
+                        else if (!isEmptySecond && !isNegativeSecond && !isStringSecond)
                           oc.addOperationRange(CenteredSection.selectedAttribute, "", secondInputSearch);
                         widget.hpage.change_subpage(0);
                       }
@@ -806,7 +812,7 @@ class _CenteredSectionState extends State<CenteredSection> {
                     ),
                     onPressed: () {
                       String inputSearch = inputHandler.text;
-                      if (inputSearch == null || inputSearch.isEmpty || inputSearch == "" || inputSearch == " ") {
+                      if (inputSearch == null || inputSearch.isEmpty || isOnlySpace(inputSearch)) {
                         widget.hpage.change_subpage(0);
                       } else {
                         OperationContainer oc = new OperationContainer();
@@ -1120,10 +1126,10 @@ class _CenteredSectionState extends State<CenteredSection> {
                         _inLimit = inputLimitHandler.text;
                         _inSkip = inputSkipHandler.text;
                         bool hasLimit = true, hasSkip = true, hasAttribute = true, hasAttributeValue = true;
-                        if (_inLimit == null || _inLimit == "" || _inLimit == "0") hasLimit = false;
-                        if (_inSkip == null || _inSkip == "" || _inSkip == "0") hasSkip = false;
-                        if (_inSelectedValue == null || _inSelectedValue == "") hasAttributeValue = false;
-                        if (_inSelected == "") hasAttribute = false;
+                        if (_inLimit == null || isOnlySpace(_inLimit) || _inLimit == "0" || isNumNegative(_inLimit)) hasLimit = false;
+                        if (_inSkip == null || isOnlySpace(_inSkip) || _inSkip == "0" || isNumNegative(_inSkip)) hasSkip = false;
+                        if (_inSelectedValue == null || isOnlySpace(_inSelectedValue)) hasAttributeValue = false;
+                        if (isOnlySpace(_inSelected)) hasAttribute = false;
                         // Checks
                         OperationContainer oc = new OperationContainer();
                         if (hasAttribute && hasAttributeValue) {
@@ -1208,6 +1214,21 @@ class _CenteredSectionState extends State<CenteredSection> {
 
   }
 
+  // controllo di una stringa se contiene solo spazi vuoti
+  bool isOnlySpace(String str){
+    if (str.trim().length == 0) return true;
+    else return false;
+  }
+
+  // controllo di una stringa se è un numero negativo ritornando true, invece se è un numero positivo o non è un numero ritorna false
+  bool isNumNegative(String str){
+    // controllo per verificare se la stringa è un numero
+    if (int.tryParse(str) != null){
+      if (int.parse(str) < 0)
+        return true;
+    }
+    return false;
+  }
 
 
 }
