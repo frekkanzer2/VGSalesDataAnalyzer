@@ -712,16 +712,27 @@ class _CenteredSectionState extends State<CenteredSection> {
                         bool isNegativeSecond = false;
                         bool isStringFirst = false;
                         bool isStringSecond = false;
+                        // checking if first input is empty
                         if ((firstInputSearch == null || firstInputSearch.isEmpty ||
                             firstInputSearch == "" || firstInputSearch == " ")) {
                           isEmptyFirst = true;
-                        } else if (isNumNegative(firstInputSearch)) isNegativeFirst = true;
-                        else isStringFirst = true;
+                        }
+                        // checking if first input is a negative number
+                        else if (isNumNegative(firstInputSearch)) isNegativeFirst = true;
+                        // checking if first input is a number
+                        else if (isNumber(firstInputSearch)) isStringFirst = false;
+                        else isStringFirst = true; // not a number
+                        // checking if first input is empty
                         if ((secondInputSearch == null || secondInputSearch.isEmpty ||
                             secondInputSearch == "" || secondInputSearch == " ")) {
                           isEmptySecond = true;
-                        } else if (isNumNegative(secondInputSearch)) isNegativeSecond = true;
-                        else isStringSecond = true;
+                        }
+                        // checking if first input is a negative number
+                        else if (isNumNegative(secondInputSearch)) isNegativeSecond = true;
+                        // checking if first input is a number
+                        else if (isNumber(secondInputSearch)) isStringSecond = false;
+                        else isStringSecond = true; // not a number
+                        // recording query data
                         if (!isEmptyFirst && !isEmptySecond && !isNegativeFirst && !isNegativeSecond && !isStringFirst && !isStringSecond)
                           oc.addOperationRange(CenteredSection.selectedAttribute, firstInputSearch, secondInputSearch);
                         else if (!isEmptyFirst && !isNegativeFirst && !isStringFirst)
@@ -1427,6 +1438,11 @@ class _CenteredSectionState extends State<CenteredSection> {
   bool isOnlySpace(String str){
     if (str.trim().length == 0) return true;
     else return false;
+  }
+
+  bool isNumber(String str) {
+    if (int.tryParse(str) != null) return true;
+    return false;
   }
 
   // controllo di una stringa se è un numero negativo ritornando true, invece se è un numero positivo o non è un numero ritorna false
